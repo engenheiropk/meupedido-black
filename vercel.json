@@ -23,5 +23,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/create-pix",
+      "destination": "/api/create-pix.js"
+    },
+    {
+      "source": "/api/check-pix",
+      "destination": "/api/check-pix.js"
+    }
   ]
 }
