@@ -1,13 +1,10 @@
 {
-  "version": 2,
-  "functions": {
-    "api/create-pix.js": {
-      "maxDuration": 10
-    },
-    "api/check-pix.js": {
-      "maxDuration": 10
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     }
-  },
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
@@ -22,19 +19,9 @@
         },
         {
           "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization"
+          "value": "Content-Type"
         }
       ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/create-pix",
-      "destination": "/api/create-pix.js"
-    },
-    {
-      "source": "/api/check-pix",
-      "destination": "/api/check-pix.js"
     }
   ]
 }
