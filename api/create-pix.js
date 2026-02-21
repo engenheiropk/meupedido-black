@@ -42,7 +42,7 @@ export default async function handler(req, res) {
         paymentMethod: 'pix',
         items: [
           {
-            title: 'mtx2027',
+            title: 'Ofertinha',
             unitPrice: amount,
             quantity: 1,
             tangible: false
