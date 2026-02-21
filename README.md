@@ -75,6 +75,28 @@ Content-Type: application/json
 }
 ```
 
+### GET `/api/check-pix?id={transactionId}`
+
+Verifica o status atual de um PIX já criado (útil para liberação de tela após pagamento).
+
+**Query Params:**
+- `id` (obrigatório): O `transactionId` retornado na criação.
+
+**Exemplo de Request:**
+```
+GET /api/check-pix?id=TRX123456
+```
+
+**Response (Sucesso):**
+```json
+{
+  "success": true,
+  "data": {
+    "status": "PAID" // Pode ser PENDING, APPROVED, PAID, etc.
+  }
+}
+```
+
 ## 🔒 Segurança
 
 - ✅ API Key armazenada em variável de ambiente (nunca exposta)
