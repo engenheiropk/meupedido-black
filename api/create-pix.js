@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   // CORS - Permite acesso do Shopify
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   // Responde preflight
@@ -9,29 +9,7 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  const apiKey = process.env.BLACKCAT_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: 'API Key não configurada no servidor' });
-  }
-
-  // --- COMPORTAMENTO GET (CHECK PIX) ---
-  if (req.method === 'GET') {
-    const { id } = req.query;
-    if (!id) return res.status(400).json({ error: 'ID da transação ausente' });
-
-    try {
-      const response = await fetch(`https://api.blackcatpagamentos.online/api/sales/check/${id}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey }
-      });
-      const data = await response.json();
-      return res.status(response.status).json(data);
-    } catch (error) {
-      return res.status(500).json({ error: 'Erro interno ao consultar pagamento' });
-    }
-  }
-
-  // --- COMPORTAMENTO POST (CREATE PIX) ---
+  // Apenas POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -43,7 +21,13 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Dados incompletos: nome, CPF e valor são obrigatórios' });
   }
 
+  // A API Key vem das variáveis de ambiente da Vercel (SEGURA!)
+  const apiKey = process.env.BLACKCAT_API_KEY;
 
+  if (!apiKey) {
+    console.error('BLACKCAT_API_KEY não configurada');
+    return res.status(500).json({ error: 'API Key não configurada no servidor' });
+  }
 
   try {
     const response = await fetch('https://api.blackcatpagamentos.online/api/sales/create-sale', {
@@ -81,10 +65,10 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-
+    
     // Log para debug (aparece no dashboard da Vercel)
     console.log('PIX criado:', data.data?.transactionId || 'erro');
-
+    
     return res.status(response.status).json(data);
 
   } catch (error) {
