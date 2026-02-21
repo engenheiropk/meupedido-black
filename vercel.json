@@ -3,6 +3,9 @@
   "functions": {
     "api/create-pix.js": {
       "maxDuration": 10
+    },
+    "api/check-pix.js": {
+      "maxDuration": 10
     }
   },
   "headers": [
